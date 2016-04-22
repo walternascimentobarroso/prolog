@@ -1,0 +1,25 @@
+%primeiro exemplo - simples%
+humano(pedro).
+
+%segundo exemplo%
+gato(tom).
+tom(gato).
+jerry(rato).
+spike(cachorro).
+butch(gato).
+
+%exemplo de saida%
+write('Olá').
+
+%test 2%
+pai(david, john).
+pai(jim, david).
+pai(steve, jim).
+pai(nathan, steve).
+
+avo(A, B) :- pai(A, X), pai(X, B).
+
+ancestral(X,Y) :- mae(X,Y).
+ancestral(X,Y) :- pai(X,Y).
+ancestral(X,Y) :- mae(X,Z), ancestral(Z,Y).
+ancestral(X,Y) :- pai(X,Z), ancestral(Z,Y). 
