@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>JSON-RPC for JQuery Terminal Emulator</title>
+    <meta name="author" content="Jakub Jankiewicz - jcubic&#64;onet.pl"/>
+    <meta name="Description" content="Demonstration for JQuery Terminal Emulator using call automaticly JSON-RPC service (in php) with authentication."/>
+    <link rel="sitemap" type="application/xml" title="Sitemap" href=""/>
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <script src="../js/jquery-1.7.1.min.js"></script>
+    <script src="../js/jquery.mousewheel-min.js"></script>
+    <script src="../js/jquery.terminal-src.js"></script>
+    <link href="../css/jquery.terminal.css" rel="stylesheet"/>
+  </head>
+<body>
+
+<script>
+jQuery(document).ready(function($) {
+    var id = 1;
+    $('body').terminal(function(command, term) {
+	
+			// *****************************************************
+	        //login: true,
+            //greetings: "You are authenticated",
+            //onBlur: function() {
+                // the height of the body is only 2 lines initialy
+            //    return false;
+            //}
+			// *****************************************************
+	
+		if (command == 'prolog') {
+            term.push(function(command, term) {
+                term.pause();
+                $.jrpc("game-rpc-service.php", "query", [command],
+                       	
+						function(data) {
+                           term.resume();
+                           if (data.error && data.error.message) {
+                               term.error("ERROR: " + data.error.message);
+                           } else {
+                               if (typeof data.result == 'boolean') {
+                                   term.echo(data.result ? 'success' : 'fail');
+                               } else {
+                                   // var len = data.result.length;
+                                   // for(var i=0;i<len; ++i) {
+                                   //   term.echo(data.result[i].join(' | '));
+                                   //}
+								   term.echo(data.result);
+								   term.resume();
+                               }
+                           }
+                       },
+					   
+                       function(xhr, status, error) {
+                          // term.error('[AJAX] ' + status + ' - Server reponse is: \n' + xhr.responseText);
+						  // Note: This brings back the entirity of the response from the PHP cURL call.
+						  term.error(xhr.responseText);
+                          term.resume();
+                       }); 
+					   
+					      
+            }, 
+			
+			{
+                greetings: "This is a Prolog Adventure Game - Nani",
+                prompt: "prolog> "});
+        } else {
+            term.echo("unknown command " + command);
+        }
+    }, {
+        greetings: "Welcome to the SWI-Prolog Adventure Game - type 'prolog' to invoke the interpreter, and then 'begin' to start the game.",
+        onBlur: function() {
+            // prevent loosing focus
+            return false;
+        }
+    });
+});
+
+</script>
+</body>
