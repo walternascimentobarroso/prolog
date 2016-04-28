@@ -9,6 +9,7 @@
 :- dynamic(menuRomenia/0).
 :- dynamic(opRomenia/1).
 :- dynamic(acaoRomenia/0).
+:- dynamic(imprimirCaminho/1).
 :- initialization(menu).
 :- include(romenia).
 :- include(aEstrela).
@@ -19,8 +20,7 @@ menu :-
 	writeln("-----------Menu principal--------------"),
 	writeln("Digite sua opção:"),
 	tab(10),writeln("1) Mapa da romenia"),
-	tab(10),writeln("2) Novo mapa"),
-	tab(10),writeln("3) Sair"),
+	tab(10),writeln("2) Sair"),
 	write("Sua opção é: "), read(X),
 	op(X),
 menu.
@@ -29,8 +29,7 @@ menu.
 op(X) :- 
 	(
 		(X = 1) -> menuRomenia;
-		(X = 2) -> write("Opção 2"),nl;
-		(X = 3) -> halt
+		(X = 2) -> halt
 	).
 
 menuRomenia :- 
@@ -52,3 +51,19 @@ acaoRomenia :-
 	writeln("Digite sua opção:"),
 	tab(10),writeln("Em qual cidade você esta?"), read(X),
 	encontrarCaminho(X,'Bucharest'),nl.
+
+%%%%%%%%%%%%%%%%%%%%% imprime o resultado %%%%%%%%%%%%%%%%%%%%%
+imprimirCaminho([CidadeAtual|Cola]) :-
+	writeln('Caminho a percorrer: '),
+	imprimeCaminho([CidadeAtual|Cola]).
+
+imprimeCaminho([CidadeAtual|Cola]) :-
+	cidade(CidadeAtual, X),
+	write(X),
+	(X = 'Bucharest' -> write('.'); write(', ')),
+	imprimeCaminho(Cola).
+
+imprimeCaminho([Custo]) :-
+	nl,write('A distância total percorrida foi de: '),
+	write(Custo),
+	write(' km.').

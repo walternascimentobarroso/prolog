@@ -4,7 +4,6 @@
 :- dynamic(encontrarCaminho/2).
 :- dynamic(escolherProximo/3).
 :- dynamic(estenderProximoCaminho/2).
-:- dynamic(imprimirCaminho/1).
 :- dynamic(inverterCaminho/2).
 :- dynamic(obterDistancia/3).
 :- dynamic(removerCaminho/3).
@@ -84,20 +83,3 @@ concatenarCaminhos([X|Y],L,[X|Lista]) :- concatenarCaminhos(Y,L,Lista).
 
 removerCaminho(X,[X|T],T) :- !.
 removerCaminho(X,[Y|T],[Y|T2]) :- removerCaminho(X,T,T2).
-
-%%%%%%%%%%%%%%%%%%%%% imprime o resultado %%%%%%%%%%%%%%%%%%%%%
-imprimeCaminho([Custo]) :-
-	nl,
-	write('A distância total percorrida foi de: '),
-	write(Custo),
-	write(' km.').
-
-imprimeCaminho([CidadeAtual|Cola]) :-
-	cidade(CidadeAtual, X),
-	write(X),
-	write(', '),
-	imprimeCaminho(Cola).
-
-imprimirCaminho([CidadeAtual|Cola]) :-
-	writeln('Caminho a percorrer: '),
-	imprimeCaminho([CidadeAtual|Cola]).
