@@ -8,7 +8,7 @@ geo :- carrega('geo.bd'),
 		continua(R),
 	R = n,
 	!,
-	salva(capital,'geo.bd').
+	salva('geo.bd').
 
 carrega(A) :-
 	exists_file(A),
@@ -31,6 +31,7 @@ responde(E) :-
 	asserta(capital(C,E)).
 
 continua(R) :-
+	salva('geo.bd'),
 	format('~nContinua? [s/n] '),
 	get_char(R),
 	get_char('\n').
@@ -39,7 +40,7 @@ gets(S) :-
 	read_line_to_codes(user,C),
 	name(S,C).
 
-salva(P,A) :-
+salva(A) :-
 	tell(A),
-	listing(P),
+	listing(capital),
 	told.

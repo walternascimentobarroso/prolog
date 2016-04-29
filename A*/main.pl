@@ -54,6 +54,7 @@ acaoRomenia :-
 
 %%%%%%%%%%%%%%%%%%%%% imprime o resultado %%%%%%%%%%%%%%%%%%%%%
 imprimirCaminho([CidadeAtual|Cola]) :-
+	append('Saida.txt'),
 	writeln('Caminho a percorrer: '),
 	imprimeCaminho([CidadeAtual|Cola]).
 
@@ -66,4 +67,4 @@ imprimeCaminho([CidadeAtual|Cola]) :-
 imprimeCaminho([Custo]) :-
 	nl,write('A distância total percorrida foi de: '),
 	write(Custo),
-	write(' km.').
+	write(' km.'), shell('xdg-open Saida.txt'), told.

@@ -1,0 +1,5 @@
+:- dynamic capital/2.
+
+capital(texas, geogear).
+capital(manaus, amazonas).
+

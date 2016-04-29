@@ -23,3 +23,4 @@ ancestral(X,Y) :- mae(X,Y).
 ancestral(X,Y) :- pai(X,Y).
 ancestral(X,Y) :- mae(X,Z), ancestral(Z,Y).
 ancestral(X,Y) :- pai(X,Z), ancestral(Z,Y). 
+

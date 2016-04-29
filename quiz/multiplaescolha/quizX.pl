@@ -1,14 +1,6 @@
 :- dynamic gamePoint/1.
-:- dynamic content/7.
-
+:- include(capital).
 :- initialization(main).
-
-/*Content(Id,Discipline,Lesson,Page,Paragraph,Question,Aternative1,Alternative2,Alternative3,Alternative4,CorrectAlternative) */
-content(1,'Qual a capital de Roraima?','Boa Vista','Manaus','Porto Velho','Rorainopolis',1).
-content(2,'Como sao representadas funcao para entrada e saida de dados em haskell?','putStrLn, getLine','scanf, fscanf','read, readln','ghci, ghcin',1).
-content(3,'O resultado da operacao succ 9*10 e :','91','90','100','0',3).
-content(4,'O paradigma funcional prioriza:','passagem por referencia','passagem por parametro','uso de parenteses','recursao',4).
-content(5,'Para obter o elemento de uma lista em haskell pelo seu indice e utilizado o operador:','!!','>/','<>',':-',1).
 
 gamePoint(0).
 numberOfQuestions(5).
@@ -39,32 +31,29 @@ randomizeId(RandomId) :-
 		numberOfQuestions(Range),
 		RandomId is integer(random(Range) + 1),		
 		findall(Id,content(Id,_,_,_,_,_,_),Lista), 
-		member(RandomId,Lista);
+		member(RandomId,Lista),
+		writeln(Lista);
 		findall(Id,content(Id,_,_,_,_,_,_),_),
 		randomizeId(RandomId).
-
-randomizeId(_) :- 
-		gameOver.			
 		
 quizItem(Id) :-
 	question(Id,Question),
-	write(Question),nl,
+	format('Qual é a capital do(e) ~w? ',[Question]),nl,
 	alternative(Id,1,FirstAlternative),
-	write('  1)'),write(FirstAlternative),nl,
+	write('  1) '),write(FirstAlternative),nl,
 	alternative(Id,2,SecondAlternative),
-	write('  2)'),write(SecondAlternative),nl,
+	write('  2) '),write(SecondAlternative),nl,
 	alternative(Id,3,ThirdAlternative),
-	write('  3)'),write(ThirdAlternative),nl,
+	write('  3) '),write(ThirdAlternative),nl,
 	alternative(Id,4,FourthAlternative),
-	write('  4)'),write(FourthAlternative),nl,
-	write('  5)Terminar Jogo'),nl,
+	write('  4) '),write(FourthAlternative),nl,
+	write('  5) Terminar Jogo'),nl,
 	read(Choice),
 	ifThenElse(Choice=:=5,gameOver,answer(Id,Choice)).
 	
 ifThenElse(X, Y, _) :- X, !, Y. 
 ifThenElse(_, _, Z) :- Z.
 
-/* If the user hit the answer, remove this from database to this dont repeat*/
 quizEngine(Id) :- 
 	quizItem(Id),
 	gamePoint(Point), 
@@ -90,9 +79,8 @@ gameOver :-
 
 main :- 
 	write('=================================================='),nl,
-	write('============Bem vindo ao QuizComenda=============='),nl,
+	write('===============Bem vindo ao SIEGE================='),nl,
 	write('=================================================='),nl,
-	write('Responda as perguntas e iremos te recomendar'),nl,nl,
 	randomizeId(RandomId),		
 	quizEngine(RandomId).
 
