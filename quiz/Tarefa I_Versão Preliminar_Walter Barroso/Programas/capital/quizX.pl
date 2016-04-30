@@ -1,9 +1,6 @@
-:- dynamic gamePoint/1.
 :- include(capital).
-:- include(engine).
-:- initialization(main).
 
-question(Id,Question) :- 
+questionCapital(Id,Question) :- 
 	content(Id,Question,_,_,_,_,_).
 
 alternative(Id,1,FirstAlternative) :- 
@@ -20,20 +17,18 @@ alternative(Id,4,FourthAlternative) :-
 
 alternative(_,5,_) :- halt.
 
-answer(Id,Answer) :- content(Id,_,_,_,_,_,Answer).
+answerCapital(Id,Answer) :- content(Id,_,_,_,_,_,Answer).
 
-incrementPoint(Point,PointMoreOne) :- PointMoreOne is Point+1.
-
-randomizeId(RandomId) :-
+randomizeIdCapital(RandomId) :-
 	numberOfQuestions(Range),
 	RandomId is integer(random(Range) + 1),		
 	findall(Id,content(Id,_,_,_,_,_,_),Lista), 
 	member(RandomId,Lista);
 	findall(Id,content(Id,_,_,_,_,_,_),_),
-	randomizeId(RandomId).
+	randomizeIdCapital(RandomId).
 		
-quizItem(Id) :-
-	question(Id,Question),
+quizItemCapital(Id) :-
+	questionCapital(Id,Question),
 	format('Qual é a capital do(e) ~w? ',[Question]),nl,
 	alternative(Id,1,FirstAlternative),
 	write('  1) '),write(FirstAlternative),nl,
@@ -45,38 +40,22 @@ quizItem(Id) :-
 	write('  4) '),write(FourthAlternative),nl,
 	write('  5) Terminar Jogo'),nl,
 	read(Choice),
-	ifThenElse(Choice=:=5,gameOver,answer(Id,Choice)).
+	ifThenElse(Choice=:=5,gameOver,answerCapital(Id,Choice)).
 
-quizEngine(Id) :- 
-	quizItem(Id),
-	gamePoint(Point), 
-	incrementPoint(Point,PointMoreOne),
-	retract(gamePoint(Point)),
-	assertz(gamePoint(PointMoreOne)), 
+quizEngineCapital(Id) :- 
+	quizItemCapital(Id),
+	newPoint,
 	retract(content(Id,_,_,_,_,_,_)),
 	writeln('Voce Acertou'),nl,
 	aggregate_all(count, content(_,_,_,_,_,_,_), Count),
-	ifThenElse(Count=:=0,gameOver,func).
+	ifThenElse(Count=:=0,gameOver,capital).
 
-quizEngine(Id) :-
+quizEngineCapital(Id) :-
 	retract(content(Id,_,_,_,_,_,_)),
 	writeln('Voce Errou'),nl,
 	aggregate_all(count, content(_,_,_,_,_,_,_), Count),
-	ifThenElse(Count=:=0,gameOver,func).
+	ifThenElse(Count=:=0,gameOver,capital).
 
-func :-
-	randomizeId(RandomId),	
-	quizEngine(RandomId).
-
-gameOver :- 
-	writeln('Fim de jogo'),nl,
-	write('Sua pontuacao final foi: '),
-	gamePoint(Point),writeln(Point),halt.
-
-main :- 
-	writeln('=================================================='),
-	writeln('===============Bem vindo ao SIEGE================='),
-	writeln('=================================================='),
-	randomizeId(RandomId),	
-	quizEngine(RandomId).
-
+capital :- 
+	randomizeIdCapital(RandomId),	
+	quizEngineCapital(RandomId).
